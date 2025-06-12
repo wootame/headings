@@ -1,0 +1,11 @@
+venv/
+.DS_Store
+
+old/*
+!old/.gitkeep
+
+site/*
+!site/.gitkeep
+
+workspace/*
+!workspace/.gitkeep
