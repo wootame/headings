@@ -7,7 +7,7 @@
 - Python 3.x インストール済み
 - `pip` 使用可能
 
-## 🐍 セットアップ手順
+## 🐍 セットアップ
 
 1. 仮想環境の作成
 ```bash
@@ -15,13 +15,17 @@ python -m venv venv
 ```
 
 2. 仮想環境の有効化
+windows: `venv\Scripts\activate`
+Mac: `source venv/bin/activate`
+
+3. 仮想環境の無効化
 ```bash
-source venv/bin/activate  # Windows の場合は venv\Scripts\activate
+deactivate
 ```
 
 3. 依存パッケージのインストール
 ```bash
-pip install requests beautifulsoup4
+pip install requests beautifulsoup4 lxml
 ```
 
 ## 🚀 使い方
