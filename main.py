@@ -2,6 +2,7 @@ import os
 import sys
 import requests
 from bs4 import BeautifulSoup
+from bs4.element import Tag
 
 URL_LIST_FILE = "sites.txt"
 WORKSPACE_DIR = "workspace"
@@ -17,7 +18,7 @@ def read_urls_from_file(path: str) -> list[str]:
 
 # ページ内の h1〜h6 を順番通りに抽出して、(見出しレベル, テキスト) のリストで返す
 # また、<title> タグの内容をタイトルとして返す（なければ空文字列）
-def fetch_headings_in_order(url: str) -> list[tuple[int, str]]:
+def fetch_headings_in_order(url: str) -> tuple[str, list[tuple[int, str]]]:
     """
     ページ内の h1〜h6 を順番通りに抽出して、
     (見出しレベル, テキスト) のリストで返す
@@ -28,7 +29,7 @@ def fetch_headings_in_order(url: str) -> list[tuple[int, str]]:
         resp.raise_for_status()
     except requests.exceptions.RequestException as e:
         print(f"[ERROR] Failed to fetch {url}: {e}")
-        return []
+        return "", []
 
     # レスポンスをパース
     soup = BeautifulSoup(resp.content, "lxml")
@@ -41,6 +42,8 @@ def fetch_headings_in_order(url: str) -> list[tuple[int, str]]:
     tags = ['h1','h2','h3','h4','h5','h6']
     headings = []
     for tag in soup.find_all(tags):
+        if not isinstance(tag, Tag):
+            continue
         level = int(tag.name[1])  # 'h2' -> 2
         text = tag.get_text(strip=True)
         if text:
