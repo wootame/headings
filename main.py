@@ -56,31 +56,29 @@ def save_all_headings_markdown(
 ) -> None:
     """
     複数サイトの見出し情報を 1 つの Markdown ファイルにまとめて保存する。
-    出力先は `root/workspace/<subdir>/下書き.md`。
-    清書用の空ファイル `清書.md` も同ディレクトリに作成する。
+    `root/workspace/<subdir>/links.md` にリンク一覧を保存する。
+    `root/workspace/<subdir>/output.md` に結果を保存する。
     """
     base_dir = os.path.join(WORKSPACE_DIR, subdir)
     os.makedirs(base_dir, exist_ok=True)
 
-    draft_path = os.path.join(base_dir, "下書き.md")
-    final_path = os.path.join(base_dir, "清書.md")
+    draft_path = os.path.join(base_dir, "links.md")
+    final_path = os.path.join(base_dir, "output.md")
 
     with open(draft_path, "w", encoding="utf-8") as f:
         # 上部リンク一覧
         for url, title, _ in results:
             f.write(f"## Headings from: [{title}]({url})\n")
-        f.write("\n---\n\n")
 
+    # 結果を output.md に保存
+    with open(final_path, "w", encoding="utf-8") as f:
         # 下部に各ページの見出し一覧
         for _, _, headings in results:
             for level, text in headings:
                 indent = "  " * (level - 1)
                 f.write(f"{indent}- H{level}: {text}\n")
             f.write("\n---\n\n")
-
-    # 空の清書ファイルを作成（上書きOK）
-    with open(final_path, "w", encoding="utf-8") as f:
-        pass
+        f.write("これらを内容として被りのある見出しはまとめ、１つの見出しリストとして統合してください。")
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
